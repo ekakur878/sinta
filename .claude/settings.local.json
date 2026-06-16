@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node *)",
+      "PowerShell(node -e \"const fs=require\\('fs'\\);const code=fs.readFileSync\\('C:/Users/EKA/Documents/web/sinta/js/app.js','utf8'\\);try{new Function\\(code\\);console.log\\('Syntax OK'\\)}catch\\(e\\){console.log\\('SYNTAX ERROR at line ~'+e.lineNumber+':',e.message\\)}\" 2>&1)"
+    ]
+  }
+}

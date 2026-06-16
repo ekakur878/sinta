@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SINTA — Sistem Informasi Pencatatan Aset</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ======================== APP ======================== -->
+<div id="app" class="hidden">
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🖥️</div>
+      <div class="brand-text">
+        <h2>SINTA</h2>
+        <p>Pencatatan Aset IT</p>
+      </div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sidebar-avatar">A</div>
+      <div>
+        <div id="sidebar-name" style="font-size:13px;font-weight:600;color:#fff"></div>
+        <div id="sidebar-role" style="font-size:11px;color:var(--gray-400)"></div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="sidebar-nav"></nav>
+    <div class="sidebar-footer">
+      <button id="logout-btn" class="btn-logout">
+        <span>🚪</span><span>Keluar</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div id="main-content">
+    <header id="topbar">
+      <div class="topbar-left">
+        <h2 id="page-title">Dashboard</h2>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-datetime" id="topbar-datetime"></div>
+        <div class="topbar-userinfo">
+          <div class="topbar-avatar" id="topbar-avatar">A</div>
+          <span class="topbar-username" id="topbar-username"></span>
+        </div>
+      </div>
+    </header>
+
+    <main id="views-container">
+      <div id="view-dashboard"        class="view"></div>
+      <div id="view-assets"           class="view hidden"></div>
+      <div id="view-asset-form"       class="view hidden"></div>
+      <div id="view-asset-detail"     class="view hidden"></div>
+      <div id="view-users"            class="view hidden"></div>
+      <div id="view-user-form"        class="view hidden"></div>
+      <div id="view-transactions"     class="view hidden"></div>
+      <div id="view-reports"          class="view hidden"></div>
+      <div id="view-browse-assets"    class="view hidden"></div>
+      <div id="view-my-transactions"  class="view hidden"></div>
+      <div id="view-borrow-form"      class="view hidden"></div>
+    </main>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div id="modal-box" class="modal-box">
+    <div class="modal-header">
+      <h3 id="modal-title">Konfirmasi</h3>
+      <button id="modal-close" class="modal-close">✕</button>
+    </div>
+    <div id="modal-body"   class="modal-body"></div>
+    <div id="modal-footer" class="modal-footer"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast-container"></div>
+
+<!-- Loading overlay -->
+<div id="loading-overlay" class="hidden" style="
+  position:fixed;inset:0;background:rgba(255,255,255,.7);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;backdrop-filter:blur(2px);font-size:14px;color:var(--gray-600);">
+  <div style="text-align:center">
+    <div style="font-size:28px;animation:spin 1s linear infinite">⚙️</div>
+    <div style="margin-top:8px">Memuat...</div>
+  </div>
+</div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script src="js/app.js"></script>
+</body>
+</html>
