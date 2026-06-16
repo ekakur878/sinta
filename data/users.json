@@ -2,7 +2,6 @@
   {
     "id": 1,
     "username": "admin",
-    "password": "admin123",
     "nama": "Administrator",
     "email": "admin@sinta.local",
     "role": "admin",
@@ -38,5 +37,14 @@
     "role": "pengambil",
     "aktif": true,
     "createdAt": "2024-02-01"
+  },
+  {
+    "id": 5,
+    "username": "user",
+    "nama": "user user",
+    "email": "user@user.com",
+    "role": "pengambil",
+    "aktif": true,
+    "createdAt": "2026-06-16"
   }
 ]

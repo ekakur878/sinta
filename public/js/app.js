@@ -53,25 +53,13 @@ const Store = {
 const Auth = {
   user: null,
 
-  async login(username, password) {
+  async restore() {
     try {
-      this.user = await API.post('/api/login', { username, password });
-      sessionStorage.setItem('sinta_auth', JSON.stringify(this.user));
+      this.user = await API.get('/api/me');
       return true;
     } catch {
       return false;
     }
-  },
-
-  logout() {
-    this.user = null;
-    sessionStorage.removeItem('sinta_auth');
-  },
-
-  restore() {
-    const s = sessionStorage.getItem('sinta_auth');
-    if (s) { this.user = JSON.parse(s); return true; }
-    return false;
   },
 
   isAdmin() { return this.user?.role === 'admin'; },
@@ -992,7 +980,7 @@ const Pages = {
       if(id){
         const updated=await API.put(`/api/users/${id}`,data);
         Store.users=Store.users.map(u=>u.id===id?{...u,...updated}:u);
-        if(id===Auth.user.id){Auth.user={...Auth.user,...updated};sessionStorage.setItem('sinta_auth',JSON.stringify(Auth.user));}
+        if(id===Auth.user.id){Auth.user={...Auth.user,...updated};}
         toast('Pengguna berhasil diperbarui');
       }else{
         if(!password){toast('Password wajib diisi!','danger');return;}
@@ -1432,10 +1420,8 @@ function showApp() {
   Router.go('dashboard');
 }
 
-function goLogin(msg='') {
-  Auth.logout();
-  if (msg) sessionStorage.setItem('sinta_login_msg', msg);
-  window.location.href = '/login';
+function goLogin() {
+  window.location.href = '/auth/logout';
 }
 
 // ── Event Listeners ───────────────────────────────────────────────────────────
@@ -1451,8 +1437,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('#modal-close').addEventListener('click', Modal.hide.bind(Modal));
   $('#modal-overlay').addEventListener('click', e => { if(e.target===$('#modal-overlay')) Modal.hide(); });
 
-  // Cek sesi — jika tidak ada, redirect ke login
-  if (!Auth.restore()) {
+  // Cek sesi via server — jika tidak ada, redirect ke login
+  if (!await Auth.restore()) {
     window.location.href = '/login';
     return;
   }

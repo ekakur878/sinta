@@ -6,6 +6,54 @@
   <title>Login — SINTA</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .kc-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #0066cc;
+      color: #fff;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .kc-btn:hover { background: #0055aa; }
+    .kc-logo {
+      width: 22px;
+      height: 22px;
+      background: #fff;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+      color: #0066cc;
+    }
+    .login-divider {
+      text-align: center;
+      color: var(--gray-400);
+      font-size: 12px;
+      margin: 18px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+  </style>
 </head>
 <body>
 
@@ -17,48 +65,21 @@
       <p>SISTEM INFORMASI PENCATATAN ASET</p>
     </div>
     <div class="login-body">
-      <div class="login-hint">
-        <strong>Akun Demo:</strong>
-        <table>
-          <tr>
-            <td>Admin</td>
-            <td>
-              <button class="btn btn-sm btn-outline demo-login"
-                data-user="admin" data-pass="admin123"
-                style="padding:2px 8px;font-size:11px">
-                admin / admin123
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>Pengguna</td>
-            <td>
-              <button class="btn btn-sm btn-outline demo-login"
-                data-user="budi" data-pass="user123"
-                style="padding:2px 8px;font-size:11px">
-                budi / user123
-              </button>
-            </td>
-          </tr>
-        </table>
+
+      <div id="login-error" class="alert alert-danger hidden">
+        Login gagal. Silakan coba lagi atau hubungi administrator.
       </div>
-      <form id="login-form">
-        <div class="form-group" style="margin-bottom:14px">
-          <label>Username</label>
-          <input type="text" id="login-username" placeholder="Masukkan username"
-            autocomplete="username" autofocus>
-        </div>
-        <div class="form-group" style="margin-bottom:16px">
-          <label>Password</label>
-          <input type="password" id="login-password" placeholder="Masukkan password"
-            autocomplete="current-password">
-        </div>
-        <div id="login-error" class="alert alert-danger hidden"></div>
-        <button type="submit" class="btn btn-primary btn-block btn-lg" id="login-btn">
-          Masuk →
-        </button>
-      </form>
-      <p style="text-align:center;margin-top:20px;font-size:12px;color:var(--gray-400)">
+
+      <div style="text-align:center;margin-bottom:20px;color:var(--gray-500);font-size:13px;line-height:1.5">
+        Gunakan akun organisasi Anda<br>untuk mengakses SINTA
+      </div>
+
+      <a href="/auth/login" class="kc-btn" id="kc-login-btn">
+        <span class="kc-logo">K</span>
+        Masuk dengan Keycloak
+      </a>
+
+      <p style="text-align:center;margin-top:24px;font-size:12px;color:var(--gray-400)">
         SINTA v2.0 &nbsp;·&nbsp; Divisi IT
       </p>
     </div>
