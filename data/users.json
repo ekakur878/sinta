@@ -9,36 +9,6 @@
     "createdAt": "2024-01-01"
   },
   {
-    "id": 2,
-    "username": "budi",
-    "password": "user123",
-    "nama": "Budi Santoso",
-    "email": "budi@sinta.local",
-    "role": "pengambil",
-    "aktif": true,
-    "createdAt": "2024-01-01"
-  },
-  {
-    "id": 3,
-    "username": "sari",
-    "password": "user123",
-    "nama": "Sari Dewi Pratiwi",
-    "email": "sari@sinta.local",
-    "role": "pengambil",
-    "aktif": true,
-    "createdAt": "2024-01-15"
-  },
-  {
-    "id": 4,
-    "username": "rahman",
-    "password": "user123",
-    "nama": "Ahmad Rahman",
-    "email": "rahman@sinta.local",
-    "role": "pengambil",
-    "aktif": true,
-    "createdAt": "2024-02-01"
-  },
-  {
     "id": 5,
     "username": "user",
     "nama": "user user",
