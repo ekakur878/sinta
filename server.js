@@ -143,6 +143,8 @@ app.get('/auth/callback', async (req, res) => {
 
 app.get('/auth/logout', async (req, res) => {
   const refreshToken = req.session.refreshToken;
+  const loginMethod  = req.session.loginMethod;
+
   if (refreshToken) {
     try {
       await kcPost(`${KC_URL}/realms/${KC_REALM}/protocol/openid-connect/logout`, {
@@ -154,7 +156,77 @@ app.get('/auth/logout', async (req, res) => {
       console.error('Keycloak back-channel logout error:', err.message);
     }
   }
-  req.session.destroy(() => res.redirect('/login'));
+
+  req.session.destroy(() => {
+    if (loginMethod === 'sso-relay') return res.redirect(WEBAPP_URL);
+    res.redirect('/login');
+  });
+});
+
+const crypto = require('crypto');
+const SSO_RELAY_SECRET = process.env.SSO_RELAY_SECRET || 'sso-relay-rahasia-2024';
+const WEBAPP_URL       = process.env.WEBAPP_URL        || 'http://localhost:3000';
+
+// ── SSO Token relay (dari SSO Portal) ────────────────────────────────────────
+// TIDAK dilindungi requireAuth
+app.get('/auth/sso-token', (req, res) => {
+  const { data, sig } = req.query;
+  if (!data || !sig) return res.redirect('/login?error=no_token');
+
+  // Verifikasi tanda tangan HMAC
+  const expectedSig = crypto.createHmac('sha256', SSO_RELAY_SECRET).update(data).digest('hex');
+  if (sig !== expectedSig) {
+    console.error('SSO: tanda tangan tidak valid');
+    return res.redirect('/login?error=invalid_sig');
+  }
+
+  let payload;
+  try {
+    payload = JSON.parse(Buffer.from(data, 'base64url').toString());
+  } catch (e) {
+    return res.redirect('/login?error=invalid_data');
+  }
+
+  // Cek kedaluwarsa — berlaku 60 detik
+  if (Date.now() - payload.ts > 60_000) {
+    console.error('SSO: payload kedaluwarsa');
+    return res.redirect('/login?error=expired');
+  }
+
+  const { username, email, name, role: ssoRole } = payload;
+
+  // Map role dari webapp SSO → role SINTA
+  const roleMap = { admin: 'admin', user: 'pengambil' };
+  const mappedRole = roleMap[ssoRole] || 'pengambil';
+
+  const users = readDB('users');
+  let user = users.find(u => u.username === username || (email && u.email === email));
+
+  if (!user) {
+    user = {
+      id:        nextId(users),
+      username,
+      nama:      name || username,
+      email:     email || '',
+      role:      mappedRole,
+      aktif:     true,
+      createdAt: todayStr()
+    };
+    users.push(user);
+    writeDB('users', users);
+    console.log(`✅ SSO: user baru dibuat: ${username} | role: ${mappedRole}`);
+  } else if (ssoRole && user.role !== mappedRole) {
+    user.role = mappedRole;
+    writeDB('users', users);
+    console.log(`✅ SSO: role ${username} diupdate → ${mappedRole}`);
+  }
+
+  if (!user.aktif) return res.redirect('/login?error=akun_nonaktif');
+
+  req.session.user        = { ...user };
+  req.session.loginMethod = 'sso-relay';
+  console.log(`✅ SSO login: ${username} | role: ${user.role}`);
+  res.redirect('/');
 });
 
 // ── HTML routes (didefinisikan sebelum static agar bisa diproteksi) ─────────
